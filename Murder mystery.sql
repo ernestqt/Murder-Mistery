@@ -6,8 +6,11 @@ We start by examining the crime scene report of January 15, 2018 at SQL city.
 
 select
 	*
-from crime_scene_report
-where city = 'SQL City' and date = 20180115 and type = 'murder'
+from 
+	crime_scene_report
+where 
+	city = 'SQL City' and date = 20180115 
+	and type = 'murder'
 
 /*
 Security footage shows that there were 2 witnesses. The first witness lives at
@@ -18,8 +21,10 @@ We need to find out who the witnesses really are. We try to find Annabel,
 the second witness, with the 'person' table.
 */
 
-select *
-from person
+select 
+	*
+from 
+	person
 where name like 'Annabel%' and address_street_name = 'Franklin Ave'
 
 /*
@@ -30,10 +35,14 @@ Let us find the person living on the last house in "Northwestern Dr". This will 
 the first witness. 
 */
 
-select *
-from person
-where address_street_name = 'Northwestern Dr'
-order by address_number desc
+select 
+	*
+from 
+	person
+where 
+	address_street_name = 'Northwestern Dr'
+order by 
+	address_number desc
 limit 1
 
 /*
@@ -60,9 +69,12 @@ Thus, let us find all the members of the gym with gold status whose id starts
 with '48Z'.
 */
 
-select *
-from get_fit_now_member
-where id like '48Z%' and membership_status = 'gold'
+select 
+	*
+from 
+	get_fit_now_member
+where 
+	id like '48Z%' and membership_status = 'gold'
 
 /*
 Only two names arise. The first suspect is Joe Germuska, id 48Z7A, person_id 28819, 
@@ -74,9 +86,13 @@ and started his membership on January 1, 2016.
 Let us find if any of them were at the gym on January 9.
 */
 
-select *
-from get_fit_now_check_in
-where check_in_date = 20180109 and membership_id in ('48Z7A', '48Z55')
+select 
+	*
+from 
+	get_fit_now_check_in
+where 
+	check_in_date = 20180109 
+	and membership_id in ('48Z7A', '48Z55')
 
 /*
 Unfortunately, both suspects were on the given date at the gym, so we cannnot
@@ -87,9 +103,11 @@ select
 	p.id,
 	p.name,
 	dl.plate_number
-from person p left join drivers_license dl
-		on p.license_id = dl.id  
-where name in ('Joe Germuska', 'Jeremy Bowers')
+from 
+	person p left join drivers_license dl
+	on p.license_id = dl.id  
+where 
+	name in ('Joe Germuska', 'Jeremy Bowers')
 
 /*
 We quickly notice that Joe Germuska does not have a driving license, but Jeremy Bowers does. 
@@ -99,9 +117,12 @@ got after the crime. Thus, the murderer must be Jeremy Bowers.
 Let us now inspect the interview of the murderer.
 */
 
-select *
-from interview
-where person_id = 67318
+select 
+	*
+from 
+	interview
+where 
+	person_id = 67318
 
 /*
 The murderer declares that was hired by a woman with a lot of money. He doesn't know her name but knows she's around 
@@ -113,8 +134,10 @@ the SQL Symphony Concert 3 times in December 2017.
 
 with female_description as 
 (
-select *
-from drivers_license
+select 
+	*
+from 
+	drivers_license
 where 
 	gender = 'female'
 	and 
@@ -133,7 +156,8 @@ select
 	i.annual_income,
   	e.event_name,
   	e.date
-from female_description fd left join person p
+from 
+	female_description fd left join person p
 	on fd.id = p.license_id
 	left join income i
 	on p.ssn = i.ssn
@@ -141,8 +165,10 @@ from female_description fd left join person p
   	on p.id = e.person_id  	
 )
 
-select *
-from female_suspects
+select 
+	*
+from 
+	female_suspects
 where 
 	date between 20171201 and 20171231
 	and event_name = 'SQL Symphony Concert'
